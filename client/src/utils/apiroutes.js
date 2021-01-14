@@ -3,19 +3,7 @@ const APIKey = "AIzaSyBqbJDVzDVFiYNBVrUSXge-9KWalCV1N_s"
 
 const API = {
     searchBooks: function(query) {
-        axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&key=" + APIKey)
-        .then(response => {
-            let results = []
-            response.items.forEach((item) => {
-                if (item.categories === "Juvenile Fiction") {
-                    results.push(item)
-                }
-
-            })
-
-        })
-
-        return results
+        return axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&key=" + APIKey)
     },
 
     // getBooks: function() {
