@@ -2,8 +2,8 @@ const axios = require("axios")
 const APIKey = "AIzaSyBqbJDVzDVFiYNBVrUSXge-9KWalCV1N_s"
 
 const API = {
-    searchBooks: function(query) {
-        return axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=40&key=" + APIKey)
+    searchBooks: function(query, startIndex) {
+        return axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=40&startIndex=" + startIndex + "&key=" + APIKey)
     },
 
     // getBooks: function() {

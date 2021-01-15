@@ -3,7 +3,7 @@ import API from '../utils/apiroutes';
 import Searchbar from '../components/Searchbar/Searchbar'
 import BookResult from '../components/BookResult/BookResult'
 import Container from 'react-bootstrap/Container'
-import CardGroup from 'react-bootstrap/CardGroup'
+import Row from 'react-bootstrap/Row'
 
 export default function BookSearch() {
 
@@ -14,20 +14,39 @@ export default function BookSearch() {
         setSearchTerm(event.target.value)
     };
 
+
     const searchFunction = event => {
         event.preventDefault();
+        var startIndex = 1;
         if (!searchTerm) {
             console.log("no search term")
             return
         }
-        else API.searchBooks(searchTerm)
+        else API.searchBooks(searchTerm, startIndex)
         .then (results => {
-           let searchResults = [];
-           results.data.items.forEach(item => {
+            console.log(results.data.totalItems)
+            let maxPages = Math.ceil((results.data.totalItems / 40))
+            console.log(maxPages)
+            let searchResults = [];
+            results.data.items.forEach(item => {
                if (typeof item.volumeInfo.categories !== 'undefined') {
                 if (item.volumeInfo.categories.includes("Juvenile Fiction") || item.volumeInfo.categories.includes("Juvenile Nonfiction")) {
                     console.log(item)
                     searchResults.push(item)
+                    for (var i = 0; i <= 5; i++) {
+                        const newstartIndex = startIndex + 40
+                        console.log(newstartIndex)
+                        API.searchBooks(searchTerm, newstartIndex)
+                        .then (results => {
+                            results.data.items.forEach(item => {
+                                if (typeof item.volumeInfo.categories !== 'undefined') {
+                                    if (item.volumeInfo.categories.includes("Juvenile Fiction") || item.volumeInfo.categories.includes("Juvenile Nonfiction")) {
+                                        searchResults.push(item)}}
+                            })
+                            
+                        })
+                        startIndex = newstartIndex
+                    }
                 }
             }    
            })
@@ -56,7 +75,9 @@ export default function BookSearch() {
              searchFunction= {searchFunction}
              />
 
-        <CardGroup>
+        <Row className="justify-content-md-center" sm={12}>
+
+
 
             {searchResults.map(book => {
                 return <BookResult
@@ -69,8 +90,9 @@ export default function BookSearch() {
                 />
 
             })}
-            </CardGroup>
 
+            </Row>
+           
 
         </Container>
        
