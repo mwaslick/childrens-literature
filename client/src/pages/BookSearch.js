@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import API from '../utils/apiroutes';
 import Searchbar from '../components/Searchbar/Searchbar'
+import BookResult from '../components/BookResult/BookResult'
 import Container from 'react-bootstrap/Container'
+import CardGroup from 'react-bootstrap/CardGroup'
 
 export default function BookSearch() {
 
@@ -22,19 +24,29 @@ export default function BookSearch() {
         .then (results => {
            let searchResults = [];
            results.data.items.forEach(item => {
-               if (typeof item.volumeInfo.categories != undefined) {
-                   console.log(item)
-    
-               }
+               if (typeof item.volumeInfo.categories !== 'undefined') {
+                if (item.volumeInfo.categories.includes("Juvenile Fiction") || item.volumeInfo.categories.includes("Juvenile Nonfiction")) {
+                    console.log(item)
+                    searchResults.push(item)
+                }
+            }    
            })
-        //    console.log(searchResults)
-        //    setSearchResults(searchResults);
-        //    return searchResults;
+           console.log(searchResults)
+           setSearchResults(searchResults);
         }).catch(err => {
             console.log(err)
         })
     }
 
+    const renderAuthors = (authors) => {
+        if (Array.isArray(authors)) {
+           return authors.join(", ")
+        } else if (!authors) {
+            return "Unknown"
+        } else {
+            return(authors)
+        }
+    }
 
     return (
         <Container>
@@ -43,6 +55,21 @@ export default function BookSearch() {
              handleChange= {handleChange} 
              searchFunction= {searchFunction}
              />
+
+        <CardGroup>
+
+            {searchResults.map(book => {
+                return <BookResult
+                key= {book.id}
+                title= {book.volumeInfo.title}
+                authors= {book.volumeInfo.authors}
+                author = {renderAuthors}
+                image= {book.volumeInfo.imageLinks.thumbnail}
+                link= {book.volumeInfo.infoLink}
+                />
+
+            })}
+            </CardGroup>
 
 
         </Container>

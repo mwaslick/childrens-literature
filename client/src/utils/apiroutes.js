@@ -3,7 +3,7 @@ const APIKey = "AIzaSyBqbJDVzDVFiYNBVrUSXge-9KWalCV1N_s"
 
 const API = {
     searchBooks: function(query) {
-        return axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&key=" + APIKey)
+        return axios.get("https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=40&key=" + APIKey)
     },
 
     // getBooks: function() {
