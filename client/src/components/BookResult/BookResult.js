@@ -1,14 +1,22 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col'
 
 export default function BookResult(props) {
 
     return (
-            <Card style={{ width: '18rem' }}>
-                <h1>{props.title}</h1>
-                <h2>{props.author(props.authors)}</h2>
-                <img src={props.image} alt={props.title}></img>
+            <Card xs={3}>
+                 <Card.Img variant="top" src={props.image} alt={props.title}/>
+                 <Card.Body>
+                     <Card.Title>{props.title}</Card.Title>
+                     <Card.Text>
+                     {props.author(props.authors)}
+
+                     </Card.Text>
+                 </Card.Body>
+
+                 <Card.Footer>
+                    <a href={props.link} target='_blank'>View on Google Books</a>
+                 </Card.Footer>
             </Card>
     )
 }

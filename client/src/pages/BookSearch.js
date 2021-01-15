@@ -3,6 +3,7 @@ import API from '../utils/apiroutes';
 import Searchbar from '../components/Searchbar/Searchbar'
 import BookResult from '../components/BookResult/BookResult'
 import Container from 'react-bootstrap/Container'
+import CardGroup from 'react-bootstrap/CardGroup'
 
 export default function BookSearch() {
 
@@ -55,17 +56,20 @@ export default function BookSearch() {
              searchFunction= {searchFunction}
              />
 
+        <CardGroup>
+
             {searchResults.map(book => {
                 return <BookResult
                 key= {book.id}
                 title= {book.volumeInfo.title}
                 authors= {book.volumeInfo.authors}
                 author = {renderAuthors}
-                image= {book.volumeInfo.imageLinks.smallThumbnail}
+                image= {book.volumeInfo.imageLinks.thumbnail}
                 link= {book.volumeInfo.infoLink}
                 />
 
             })}
+            </CardGroup>
 
 
         </Container>
