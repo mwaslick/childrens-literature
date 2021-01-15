@@ -22,9 +22,10 @@ export default function BookSearch() {
         .then (results => {
            let searchResults = [];
            results.data.items.forEach(item => {
-               if (typeof item.volumeInfo.categories != undefined) {
-                   console.log(item)
-    
+               if (typeof item.volumeInfo.categories !== 'undefined') {
+                if (item.volumeInfo.categories.includes("Juvenile fiction") || item.volumeInfo.categories.includes("Children's literature") || item.volumeInfo.categories.includes("Juvenile nonfiction")) {
+                    console.log(item)
+               }
                }
            })
         //    console.log(searchResults)
