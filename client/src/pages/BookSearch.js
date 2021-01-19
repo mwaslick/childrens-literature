@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import API from '../utils/apiroutes';
 import Searchbar from '../components/Searchbar/Searchbar'
 import BookResult from '../components/BookResult/BookResult'
 import Container from 'react-bootstrap/Container'
-import CardGroup from 'react-bootstrap/CardGroup'
+import Row from 'react-bootstrap/Row'
 
 export default function BookSearch() {
 
@@ -11,32 +11,38 @@ export default function BookSearch() {
     const [searchResults, setSearchResults] = useState([]);
 
     const handleChange = event => {
+        event.preventDefault()
         setSearchTerm(event.target.value)
     };
 
     const searchFunction = event => {
         event.preventDefault();
+        var startIndex = 1;
+        let searchData = [];
         if (!searchTerm) {
             console.log("no search term")
             return
         }
-        else API.searchBooks(searchTerm)
-        .then (results => {
-           let searchResults = [];
-           results.data.items.forEach(item => {
-               if (typeof item.volumeInfo.categories !== 'undefined') {
-                if (item.volumeInfo.categories.includes("Juvenile Fiction") || item.volumeInfo.categories.includes("Juvenile Nonfiction")) {
-                    console.log(item)
-                    searchResults.push(item)
-                }
-            }    
-           })
-           console.log(searchResults)
-           setSearchResults(searchResults);
-        }).catch(err => {
-            console.log(err)
-        })
-    }
+        else {
+            for (var i = 0; i <= 2; i ++) {
+                startIndex = (40 * i) + 1
+                API.searchBooks(searchTerm, startIndex)
+                .then (results => {
+                    results.data.items.forEach(item => {
+                        if (typeof item.volumeInfo.categories !== 'undefined') {
+                            if (item.volumeInfo.categories.includes("Juvenile Fiction") || item.volumeInfo.categories.includes("Juvenile Nonfiction")) {
+                                searchData.push(item)
+                            }
+                    }})
+                   
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+        console.log(searchData)
+        setSearchResults(searchData)
+        }}
+    
 
     const renderAuthors = (authors) => {
         if (Array.isArray(authors)) {
@@ -56,7 +62,8 @@ export default function BookSearch() {
              searchFunction= {searchFunction}
              />
 
-        <CardGroup>
+        <Row className="justify-content-md-center" sm={12}>
+
 
             {searchResults.map(book => {
                 return <BookResult
@@ -69,11 +76,11 @@ export default function BookSearch() {
                 />
 
             })}
-            </CardGroup>
 
+            </Row>
+           
 
         </Container>
        
-
     )
 }
